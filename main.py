@@ -1,13 +1,8 @@
 import streamlit as st
-import pandas as pd
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error
 import hmac
-
 from services.launch_lr import launch_linear_regression
 from services.select_param import select_parameters
-from services.upload_csv import upload_csv
+from services.upload_csv import select_columns, upload_csv
 
 
 def check_password():
@@ -54,13 +49,26 @@ else:
     df = upload_csv()
     if df is None:
         st.warning("Please upload a CSV file.")
+    else:
+        st.write("### Data Preview")
+        st.write(df.head())
+        
+        # Select X and y columns
+        X_columns, y_column = select_columns(df)
+        
+        st.write("### Selected Columns")
+        st.write("X (features):", X_columns)
+        st.write("y (target variable):", y_column)
         
     
-    fit_intercept, copy_X, n_jobs, positive = select_parameters()
-    
-    if st.button("Launch Linear Regression Model"):
-        mean_mae, test_mae = launch_linear_regression(df, fit_intercept, copy_X, n_jobs, positive)
-        st.write("Mean Absolute Error (5-fold CV): {:.2f}%".format(mean_mae))
-        st.write("Mean Absolute Error (Test set): {:.2f}%".format(test_mae))
+        fit_intercept, copy_X, n_jobs, positive = select_parameters()
+
+        print(X_columns)
+        print(y_column)
+        
+        if st.button("Launch Linear Regression Model"):
+            mean_mae, test_mae = launch_linear_regression(df, X_columns, y_column, fit_intercept, copy_X, n_jobs, positive)
+            st.write("Mean Absolute Error (5-fold CV): {:.2f}%".format(mean_mae))
+            st.write("Mean Absolute Error (Test set): {:.2f}%".format(test_mae))
 
 

@@ -4,9 +4,9 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import cross_val_score, train_test_split
 
 
-def launch_linear_regression(df, fit_intercept, copy_X, n_jobs, positive):
-    X = df.drop(columns=['target_column'])  # Replace 'target_column' with the name of your target column
-    y = df['target_column']  # Replace 'target_column' with the name of your target column
+def launch_linear_regression(df, X_columns, y_column, fit_intercept, copy_X, n_jobs, positive):
+    X = df[X_columns]  # Replace 'target_column' with the name of your target column
+    y = df.loc[:,y_column]  # Replace 'target_column' with the name of your target column
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
