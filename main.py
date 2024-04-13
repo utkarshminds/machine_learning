@@ -56,11 +56,13 @@ else:
         # Select X and y columns
         X_columns, y_column = select_columns(df)
         
-        st.write("### Selected Columns")
+        st.title("Selected Columns")
+        
         st.write("X (features):", X_columns)
         st.write("y (target variable):", y_column)
         
-    
+        st.title("Linear Regression Model - parameters")
+
         fit_intercept, copy_X, n_jobs, positive = select_parameters()
 
         print(X_columns)
